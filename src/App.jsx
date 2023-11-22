@@ -1,5 +1,6 @@
 import { useState } from "react";
 import s from "./App.module.css";
+import { ImageList } from "./components/ImageList/ImageList";
 
 export function App() {
   const [imageList, setImageList] = useState(DATA);
@@ -7,6 +8,8 @@ export function App() {
     <div className={s.root}>
       <h1>Image randomizer</h1>
       <h2>Download random open source image</h2>
+
+      <ImageList imgList={imageList} />
     </div>
   );
 }
