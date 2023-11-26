@@ -1,9 +1,12 @@
 import { useState } from "react";
 import s from "./App.module.css";
 import { ImageList } from "./components/ImageList/ImageList";
+import { useScrollPosition } from "./hooks/useScrollPosition";
 
 export function App() {
   const [imageList, setImageList] = useState(DATA);
+  const { isBottom } = useScrollPosition();
+
   return (
     <div className={s.root}>
       <h1>Image randomizer</h1>
