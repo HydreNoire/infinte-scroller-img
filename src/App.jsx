@@ -6,16 +6,18 @@ import { useScrollPosition } from "./hooks/useScrollPosition";
 export function App() {
   const [imageList, setImageList] = useState([]);
   const { isBottom } = useScrollPosition();
-  const [pageToFetch, setPageToFetch] = useState(1);
+  const [pageToFetch, setPageToFetch] = useState(6);
   const [isLoading, setIsLoading] = useState(false);
 
   async function fetchImagesByPage(page) {
+    setIsLoading(true);
     const response = await fetch(
       `https://picsum.photos/v2/list?page=${page}&limit=6`
     );
     const photos = await response.json();
 
     setImageList([...imageList, ...photos]);
+    setIsLoading(false);
   }
 
   function incrementPage() {
@@ -23,13 +25,11 @@ export function App() {
   }
 
   useEffect(() => {
-    console.log("Fetch page : ", pageToFetch);
     fetchImagesByPage(pageToFetch);
   }, [pageToFetch]);
 
   useEffect(() => {
     if (isBottom) {
-      console.log("On est en bas, increment de la page");
       incrementPage();
     }
   }, [isBottom]);
@@ -40,6 +40,8 @@ export function App() {
       <h2>Download random open source image</h2>
 
       <ImageList imgList={imageList} />
+
+      {isLoading && <div className={s.loading}></div>}
     </div>
   );
 }
