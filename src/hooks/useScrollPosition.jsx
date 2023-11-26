@@ -8,7 +8,7 @@ export function useScrollPosition() {
 
     // Remove the listener if App is not in the DOM
     return () => {
-      window.removeEventListener(listener);
+      window.removeEventListener(listener, null);
     };
   }, []);
 

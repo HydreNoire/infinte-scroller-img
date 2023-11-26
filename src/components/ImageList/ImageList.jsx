@@ -6,7 +6,11 @@ export function ImageList({ imgList }) {
     <div>
       {imgList.map((img) => {
         return (
-          <div key={img.id} className={s.card_item}>
+          <div
+            // to get an unique id
+            key={img.id + Math.floor(Math.random() * 2)}
+            className={s.card_item}
+          >
             <ImageListItem img={img} />
           </div>
         );

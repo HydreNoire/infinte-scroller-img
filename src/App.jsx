@@ -1,11 +1,38 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import s from "./App.module.css";
 import { ImageList } from "./components/ImageList/ImageList";
 import { useScrollPosition } from "./hooks/useScrollPosition";
 
 export function App() {
-  const [imageList, setImageList] = useState(DATA);
+  const [imageList, setImageList] = useState([]);
   const { isBottom } = useScrollPosition();
+  const [pageToFetch, setPageToFetch] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+
+  async function fetchImagesByPage(page) {
+    const response = await fetch(
+      `https://picsum.photos/v2/list?page=${page}&limit=6`
+    );
+    const photos = await response.json();
+
+    setImageList([...imageList, ...photos]);
+  }
+
+  function incrementPage() {
+    setPageToFetch(pageToFetch + 1);
+  }
+
+  useEffect(() => {
+    console.log("Fetch page : ", pageToFetch);
+    fetchImagesByPage(pageToFetch);
+  }, [pageToFetch]);
+
+  useEffect(() => {
+    if (isBottom) {
+      console.log("On est en bas, increment de la page");
+      incrementPage();
+    }
+  }, [isBottom]);
 
   return (
     <div className={s.root}>
@@ -17,85 +44,85 @@ export function App() {
   );
 }
 
-const DATA = [
-  {
-    id: "0",
-    author: "Alejandro Escamilla",
-    width: 5000,
-    height: 3333,
-    url: "https://unsplash.com/photos/yC-Yzbqy7PY",
-    download_url: "https://picsum.photos/id/0/5000/3333",
-  },
-  {
-    id: "1",
-    author: "Alejandro Escamilla",
-    width: 5000,
-    height: 3333,
-    url: "https://unsplash.com/photos/LNRyGwIJr5c",
-    download_url: "https://picsum.photos/id/1/5000/3333",
-  },
-  {
-    id: "2",
-    author: "Alejandro Escamilla",
-    width: 5000,
-    height: 3333,
-    url: "https://unsplash.com/photos/N7XodRrbzS0",
-    download_url: "https://picsum.photos/id/2/5000/3333",
-  },
-  {
-    id: "3",
-    author: "Alejandro Escamilla",
-    width: 5000,
-    height: 3333,
-    url: "https://unsplash.com/photos/Dl6jeyfihLk",
-    download_url: "https://picsum.photos/id/3/5000/3333",
-  },
-  {
-    id: "4",
-    author: "Alejandro Escamilla",
-    width: 5000,
-    height: 3333,
-    url: "https://unsplash.com/photos/y83Je1OC6Wc",
-    download_url: "https://picsum.photos/id/4/5000/3333",
-  },
-  {
-    id: "5",
-    author: "Alejandro Escamilla",
-    width: 5000,
-    height: 3334,
-    url: "https://unsplash.com/photos/LF8gK8-HGSg",
-    download_url: "https://picsum.photos/id/5/5000/3334",
-  },
-  {
-    id: "6",
-    author: "Alejandro Escamilla",
-    width: 5000,
-    height: 3333,
-    url: "https://unsplash.com/photos/tAKXap853rY",
-    download_url: "https://picsum.photos/id/6/5000/3333",
-  },
-  {
-    id: "7",
-    author: "Alejandro Escamilla",
-    width: 4728,
-    height: 3168,
-    url: "https://unsplash.com/photos/BbQLHCpVUqA",
-    download_url: "https://picsum.photos/id/7/4728/3168",
-  },
-  {
-    id: "8",
-    author: "Alejandro Escamilla",
-    width: 5000,
-    height: 3333,
-    url: "https://unsplash.com/photos/xII7efH1G6o",
-    download_url: "https://picsum.photos/id/8/5000/3333",
-  },
-  {
-    id: "9",
-    author: "Alejandro Escamilla",
-    width: 5000,
-    height: 3269,
-    url: "https://unsplash.com/photos/ABDTiLqDhJA",
-    download_url: "https://picsum.photos/id/9/5000/3269",
-  },
-];
+// const DATA = [
+//   {
+//     id: "0",
+//     author: "Alejandro Escamilla",
+//     width: 5000,
+//     height: 3333,
+//     url: "https://unsplash.com/photos/yC-Yzbqy7PY",
+//     download_url: "https://picsum.photos/id/0/5000/3333",
+//   },
+//   {
+//     id: "1",
+//     author: "Alejandro Escamilla",
+//     width: 5000,
+//     height: 3333,
+//     url: "https://unsplash.com/photos/LNRyGwIJr5c",
+//     download_url: "https://picsum.photos/id/1/5000/3333",
+//   },
+//   {
+//     id: "2",
+//     author: "Alejandro Escamilla",
+//     width: 5000,
+//     height: 3333,
+//     url: "https://unsplash.com/photos/N7XodRrbzS0",
+//     download_url: "https://picsum.photos/id/2/5000/3333",
+//   },
+//   {
+//     id: "3",
+//     author: "Alejandro Escamilla",
+//     width: 5000,
+//     height: 3333,
+//     url: "https://unsplash.com/photos/Dl6jeyfihLk",
+//     download_url: "https://picsum.photos/id/3/5000/3333",
+//   },
+//   {
+//     id: "4",
+//     author: "Alejandro Escamilla",
+//     width: 5000,
+//     height: 3333,
+//     url: "https://unsplash.com/photos/y83Je1OC6Wc",
+//     download_url: "https://picsum.photos/id/4/5000/3333",
+//   },
+//   {
+//     id: "5",
+//     author: "Alejandro Escamilla",
+//     width: 5000,
+//     height: 3334,
+//     url: "https://unsplash.com/photos/LF8gK8-HGSg",
+//     download_url: "https://picsum.photos/id/5/5000/3334",
+//   },
+//   {
+//     id: "6",
+//     author: "Alejandro Escamilla",
+//     width: 5000,
+//     height: 3333,
+//     url: "https://unsplash.com/photos/tAKXap853rY",
+//     download_url: "https://picsum.photos/id/6/5000/3333",
+//   },
+//   {
+//     id: "7",
+//     author: "Alejandro Escamilla",
+//     width: 4728,
+//     height: 3168,
+//     url: "https://unsplash.com/photos/BbQLHCpVUqA",
+//     download_url: "https://picsum.photos/id/7/4728/3168",
+//   },
+//   {
+//     id: "8",
+//     author: "Alejandro Escamilla",
+//     width: 5000,
+//     height: 3333,
+//     url: "https://unsplash.com/photos/xII7efH1G6o",
+//     download_url: "https://picsum.photos/id/8/5000/3333",
+//   },
+//   {
+//     id: "9",
+//     author: "Alejandro Escamilla",
+//     width: 5000,
+//     height: 3269,
+//     url: "https://unsplash.com/photos/ABDTiLqDhJA",
+//     download_url: "https://picsum.photos/id/9/5000/3269",
+//   },
+// ];
